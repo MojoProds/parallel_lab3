@@ -34,7 +34,7 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	}
 
 	if (tid == 0)
-		max_d[0] = myMax(max_d, shared[0]);
+		max_d[blockIdx.x] = shared[tid];
 }
 
 unsigned int getmax(unsigned int num[], unsigned int size) {
@@ -80,13 +80,23 @@ int main(int argc, char *argv[]) {
 	unsigned int* numbers_d;
 	unsigned int* max_d;
 	cudaMalloc((void**)&numbers_d, size * sizeof(unsigned int));
-	cudaMemcpy(numbers_d, numbers, size * sizeof(unsigned int), cudaMemcpyHostToDevice);
-	cudaMalloc((void**)&max_d, size * sizeof(unsigned int));
+	cudaMalloc((void**)&max_d, (size/1024) * sizeof(unsigned int));
 
 	// Call kernel
-	getmaxcu<<<ceil(32),512>>>(numbers_d, max_d, size);
+	int done = 0;
+	for( i = size; i > 0 && done == 0;;) {
 
-	// Copy memory to host
+		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
+		i = ciel(i / 1024);
+		getmaxcu<<<ce,1024>>>(numbers_d, max_d, size);
+		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+		if(i == 1) {
+			done = 1;
+		}
+
+	}
+
+	// Copy memory from device to host
 	cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 	max = numbers[0];
 
