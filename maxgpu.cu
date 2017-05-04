@@ -54,10 +54,10 @@ int main(int argc, char *argv[]) {
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
-	for(int i = 1;;;) {
+	// for(int i = 1;) {
 
-		__syncthreads();
-	}
+	// 	__syncthreads();
+	// }
 }
 
 /*
