@@ -47,6 +47,13 @@ unsigned int getmax(unsigned int num[], unsigned int size) {
 	return( max );
 }
 
+unsigned int printArr(unsigned int num[], unsigned int size) {
+	unsigned int i;
+
+	for(i = 0; i < size; i++)
+		printf("%u\n", num[i]);
+}
+
 int main(int argc, char *argv[]) {
 	unsigned int size = 0;  // The size of the array
 	unsigned int i;  // loop index
@@ -80,7 +87,7 @@ int main(int argc, char *argv[]) {
 	unsigned int* numbers_d;
 	unsigned int* max_d;
 	cudaMalloc((void**)&numbers_d, size * sizeof(unsigned int));
-	cudaMalloc((void**)&max_d, (size/1024) * sizeof(unsigned int));
+	cudaMalloc((void**)&max_d, (size/1024 + 1) * sizeof(unsigned int));
 
 	// Call kernel
 	int done = 0;
@@ -92,6 +99,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
+		printArr(numbers, i);
 		i = (int)ceil((float)i / 1024);
 
 	}
