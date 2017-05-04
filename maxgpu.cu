@@ -85,7 +85,7 @@ int main(int argc, char *argv[]) {
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
-
+		printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<ceil(i / 1024),1024>>>(numbers_d, max_d, i);
 		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
