@@ -84,11 +84,11 @@ int main(int argc, char *argv[]) {
 
 	// Call kernel
 	int done = 0;
-	for( i = size; i > 0 && done == 0;;) {
+	for( i = size; i > 0 && done == 0;) {
 
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
-		i = ciel(i / 1024);
-		getmaxcu<<<ce,1024>>>(numbers_d, max_d, size);
+		i = ceil(i / 1024);
+		getmaxcu<<<i,1024>>>(numbers_d, max_d, size);
 		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
