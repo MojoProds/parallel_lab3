@@ -16,7 +16,7 @@ __device__ unsigned int myMax(unsigned int* address, unsigned int val)
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
-	extern __shared__ float shared[];
+	extern __shared__ unsigned int shared[];
 
 	int tid = threadIdx.x;
 	int gid = (blockDim.x * blockIdx.x) + tid;
