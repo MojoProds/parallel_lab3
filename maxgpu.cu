@@ -3,17 +3,6 @@
 #include <time.h>
 #include <cuda.h>
 
-__device__ unsigned int myMax(unsigned int* address, unsigned int val)
-{
-	unsigned int old = *address;
-	unsigned int assumed;
-	while (val > old) {
-		assumed = old;
-		old = atomicCAS(address, assumed, val);
-	}
-	return old;
-}
-
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
 	extern __shared__ unsigned int shared[];
@@ -22,19 +11,21 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	int gid = (blockDim.x * blockIdx.x) + tid;
 	shared[tid] = 0;
 
-	if (gid < n)
+	if (gid < n) {
 		shared[tid] = numbers_d[gid];
+	}
 	__syncthreads();
 
 	for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) 
 	{
-		if (tid < s && gid < n)
+		if (tid < s && gid < n) {
 			shared[tid] = max(shared[tid], shared[tid + s]);
+		}
 		__syncthreads();
 	}
 
 	if (tid == 0)
-		max_d[0] = myMax(max_d, shared[0]);
+		max_d[blockIdx.x] = shared[tid];;
 }
 
 int main(int argc, char *argv[]) {
@@ -62,9 +53,6 @@ int main(int argc, char *argv[]) {
 	for( i = 0; i < size; i++) {
 	   numbers[i] = rand()  % size;    
 	}
-   
-	// printf(" The maximum number in the array is: %u\n", 
-	//        getmax(numbers, size));
 
 	// Memory allocation in the device
 	unsigned int* numbers_d;
@@ -75,7 +63,7 @@ int main(int argc, char *argv[]) {
 
 
 	// Call kernel
-	getmaxcu<<<ceil(size/512),512>>>(numbers_d, max_d, size);
+	//getmaxcu<<<ceil(size/512),512>>>(numbers_d, max_d, size);
 
 	// Free memory
 	cudaFree(numbers_d);
