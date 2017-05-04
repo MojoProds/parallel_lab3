@@ -93,7 +93,7 @@ int main(int argc, char *argv[]) {
 			done = 1;
 		}
 		printf("Iteration: %u\n", i / 1024);
-		i = ceil(i / 1024);
+		i = (int)ceil((float)i / 1024);
 
 	}
 
