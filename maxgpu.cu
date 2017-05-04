@@ -43,13 +43,23 @@ int main(int argc, char *argv[]) {
 
 
 	// Call kernel
-	//getmaxcu<<<ceil(size/256),256>>>(numbers_d, max_d, size);
+	getmaxcu<<<ceil(size/512),512>>>(numbers_d, max_d, size);
 
 	// Free memory
 	cudaFree(numbers_d);
 	cudaFree(max_d);
 	free(numbers);
 	exit(0);
+}
+
+__device__ unsigned int atomicMax(unsigned int* address, unsigned int val)
+{
+	unsigned int old = *address, assumed;
+	while (val > old) {
+		assumed = old;
+		old = atomicCAS(address_as_int, assumed, val);
+	}
+	return old;
 }
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
@@ -61,7 +71,7 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	shared[tid] = 0;
 
 	if (gid < n)
-		shared[tid] = d_array[gid];
+		shared[tid] = numbers_d[gid];
 	__syncthreads();
 
 	for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) 
@@ -72,15 +82,5 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	}
 
 	if (tid == 0)
-		atomicMaxf(max_d, shared[0]);
-}
-
-__device__ unsigned int atomicMaxf(unsigned int* address, unsigned int val)
-{
-	unsigned int old = *address, assumed;
-	while (val > old) {
-		assumed = old;
-		old = atomicCAS(address_as_int, assumed, val);
-	}
-	return old;
+		atomicMax(max_d, shared[0]);
 }
