@@ -92,6 +92,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
+		printf("Iteration: %u\n", i / 1024);
 		i = ceil(i / 1024);
 
 	}
