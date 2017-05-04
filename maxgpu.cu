@@ -87,12 +87,12 @@ int main(int argc, char *argv[]) {
 	for( i = size; i > 0 && done == 0;) {
 
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
-		i = ceil(i / 1024);
-		getmaxcu<<<i,1024>>>(numbers_d, max_d, size);
+		getmaxcu<<<ceil(i / 1024),1024>>>(numbers_d, max_d, i);
 		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
 		}
+		i = ceil(i / 1024);
 
 	}
 
