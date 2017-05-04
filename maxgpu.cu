@@ -54,25 +54,33 @@ int main(int argc, char *argv[]) {
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
-	// for(int i = 1;) {
+	extern __shared__ unsigned int shared[];
 
-	// 	__syncthreads();
-	// }
+	int tid = threadIdx.x;
+	int gid = (blockDim.x * blockIdx.x) + tid;
+	shared[tid] = 0;
+
+	if (gid < n)
+		shared[tid] = d_array[gid];
+	__syncthreads();
+
+	for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) 
+	{
+		if (tid < s && gid < n)
+			shared[tid] = max(shared[tid], shared[tid + s]);
+		__syncthreads();
+	}
+
+	if (tid == 0)
+		atomicMaxf(max_d, shared[0]);
 }
 
-/*
-   input: pointer to an array of long int
-		  number of elements in the array
-   output: the maximum number of the array
-*/
-unsigned int getmax(unsigned int num[], unsigned int size) {
-  unsigned int i;
-  unsigned int max = num[0];
-
-  for(i = 1; i < size; i++)
-	if(num[i] > max)
-	   max = num[i];
-
-  return( max );
-
+__device__ unsigned int atomicMaxf(unsigned int* address, unsigned int val)
+{
+	unsigned int old = *address, assumed;
+	while (val > old) {
+		assumed = old;
+		old = atomicCAS(address_as_int, assumed, val);
+	}
+	return old;
 }
