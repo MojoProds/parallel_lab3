@@ -75,7 +75,7 @@ int main(int argc, char *argv[]) {
 
 	printf(" The maximum number in the array is: %u\n", 
            getmax(numbers, size));
-	
+
 	// Memory allocation in the device
 	unsigned int* numbers_d;
 	unsigned int* max_d;
@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
 	cudaMalloc((void**)&max_d, size * sizeof(unsigned int));
 
 	// Call kernel
-	getmaxcu<<<ceil(size/512),512>>>(numbers_d, max_d, size);
+	getmaxcu<<<ceil(32),512>>>(numbers_d, max_d, size);
 
 	// Copy memory to host
 	cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
