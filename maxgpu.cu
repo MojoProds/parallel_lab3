@@ -37,6 +37,16 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 		max_d[0] = myMax(max_d, shared[0]);
 }
 
+unsigned int getmax(unsigned int num[], unsigned int size) {
+	unsigned int i;
+	unsigned int max = num[0];
+
+	for(i = 1; i < size; i++)
+		if(num[i] > max)
+			max = num[i];
+	return( max );
+}
+
 int main(int argc, char *argv[]) {
 	unsigned int size = 0;  // The size of the array
 	unsigned int i;  // loop index
@@ -63,6 +73,9 @@ int main(int argc, char *argv[]) {
 	   numbers[i] = rand()  % size;    
 	}
 
+	printf(" The maximum number in the array is: %u\n", 
+           getmax(numbers, size));
+	
 	// Memory allocation in the device
 	unsigned int* numbers_d;
 	unsigned int* max_d;
@@ -76,7 +89,7 @@ int main(int argc, char *argv[]) {
 	// Copy memory to host
 	cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 	max = numbers[0];
-	
+
 	// Print info
 	printf(" The maximum number in the array is: %u\n", max);
 
