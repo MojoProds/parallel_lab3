@@ -74,8 +74,9 @@ int main(int argc, char *argv[]) {
 	getmaxcu<<<ceil(size/512),512>>>(numbers_d, max_d, size);
 
 	// Copy memory to host
-	cudaMemcpy(max, max_d[0], sizeof(unsigned int), cudaMemcpyDeviceToHost);
-
+	cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+	max = numbers[0];
+	
 	// Print info
 	printf(" The maximum number in the array is: %u\n", max);
 
