@@ -87,12 +87,11 @@ int main(int argc, char *argv[]) {
 	for( i = size; i > 0 && done == 0;) {
 		printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
-		getmaxcu<<<ceil(i / 1024),1024>>>(numbers_d, max_d, i);
+		getmaxcu<<<(int)ceil((float)i / 1024),1024>>>(numbers_d, max_d, i);
 		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
 		}
-		printf("Iteration: %u\n", i / 1024);
 		i = (int)ceil((float)i / 1024);
 
 	}
