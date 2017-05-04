@@ -47,7 +47,7 @@ unsigned int getmax(unsigned int num[], unsigned int size) {
 	return( max );
 }
 
-unsigned int printArr(unsigned int num[], unsigned int size) {
+void printArr(unsigned int num[], unsigned int size) {
 	unsigned int i;
 
 	for(i = 0; i < size; i++)
