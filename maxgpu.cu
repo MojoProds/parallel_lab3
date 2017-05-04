@@ -16,25 +16,27 @@ __device__ unsigned int myMax(unsigned int* address, unsigned int val)
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
-	extern __shared__ unsigned int shared[];
+	extern __shared__ float shared[];
 
 	int tid = threadIdx.x;
 	int gid = (blockDim.x * blockIdx.x) + tid;
-	shared[tid] = 0;
+	shared[tid] = 0; 
 
-	if (gid < n)
-		shared[tid] = numbers_d[gid];
+	while (gid < n) {
+		shared[tid] = max(shared[tid], numbers_d[gid]);
+		gid += gridDim.x * blockDim.x;
+	}
 	__syncthreads();
-
-	for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) 
-	{
+	gid = (blockDim.x * blockIdx.x) + tid;
+	for (int s = blockDim.x / 2; s > 0; s = s / 2) {
 		if (tid < s && gid < n)
 			shared[tid] = max(shared[tid], shared[tid + s]);
 		__syncthreads();
 	}
 
-	if (tid == 0)
+	if (tid == 0) {
 		max_d[blockIdx.x] = shared[tid];
+	}
 }
 
 unsigned int getmax(unsigned int num[], unsigned int size) {
@@ -81,7 +83,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	printf(" The maximum number in the array is: %u\n", 
-           getmax(numbers, size));
+		   getmax(numbers, size));
 
 	// Memory allocation in the device
 	unsigned int* numbers_d;
