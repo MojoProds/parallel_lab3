@@ -55,7 +55,7 @@ void printArr(unsigned int num[], unsigned int size) {
 	for(i = 0; i < size; i++)
 		printf("%u, ", num[i]);
 		if(i % 5 == 0 || i == size - 1) {
-			printf("\n");
+			printf("\n\n");
 		}
 }
 
