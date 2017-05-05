@@ -3,6 +3,8 @@
 #include <time.h>
 #include <cuda.h>
 
+const int TPB = 512;
+
 __device__ unsigned int myMax(unsigned int* address, unsigned int val)
 {
 	unsigned int old = *address;
@@ -69,7 +71,7 @@ int main(int argc, char *argv[]) {
 	size = atol(argv[1]);
 
 	numbers = (unsigned int *)malloc(size * sizeof(unsigned int));
-	max = (unsigned int *)malloc((size/1024 + 1) * sizeof(unsigned int));
+	max = (unsigned int *)malloc((size/TPB + 1) * sizeof(unsigned int));
 	if( !numbers ) {
 	   printf("Unable to allocate mem for an array of size %u\n", size);
 	   exit(1);
@@ -88,15 +90,15 @@ int main(int argc, char *argv[]) {
 	unsigned int* numbers_d;
 	unsigned int* max_d;
 	cudaMalloc((void**)&numbers_d, size * sizeof(unsigned int));
-	cudaMalloc((void**)&max_d, (size/1024 + 1) * sizeof(unsigned int));
+	cudaMalloc((void**)&max_d, (size/TPB + 1) * sizeof(unsigned int));
 
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
 		printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
-		getmaxcu<<<(int)ceil((float)i / 1024),1024>>>(numbers_d, max_d, i);
-		i = (int)ceil((float)i / 1024);
+		getmaxcu<<<(int)ceil((float)i / TPB),TPB>>>(numbers_d, max_d, i);
+		i = (int)ceil((float)i / TPB);
 		cudaMemcpy(max, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
