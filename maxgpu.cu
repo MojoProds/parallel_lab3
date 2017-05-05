@@ -24,15 +24,15 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	int gid = (blockDim.x * blockIdx.x) + tid;
 	shared[tid] = 0;
 
-	if (gid < n)
-		shared[tid] = numbers_d[gid];
-	__syncthreads();
+	// if (gid < n)
+	// 	shared[tid] = numbers_d[gid];
+	// __syncthreads();
 
-	for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) {
-		if (blockDim.x - tid > s && gid < n)
-			shared[tid] = max(shared[tid], shared[tid + s]);
-		__syncthreads();
-	}
+	// for (unsigned int s = blockDim.x / 2; s > 0; s = s / 2) {
+	// 	if (blockDim.x - tid > s && gid < n)
+	// 		shared[tid] = max(shared[tid], shared[tid + s]);
+	// 	__syncthreads();
+	// }
 
 	//if (tid == 0) {
 		max_d[blockIdx.x] = 199;
