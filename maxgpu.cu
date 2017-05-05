@@ -52,11 +52,12 @@ unsigned int getmax(unsigned int num[], unsigned int size) {
 void printArr(unsigned int num[], unsigned int size) {
 	unsigned int i;
 
-	for(i = 0; i < size; i++)
+	for(i = 0; i < size; i++) {
 		printf("%u, ", num[i]);
-		if(i % 5 == 0 || i == size - 1) {
-			printf("\n\n");
+		if(i % 7 == 0 || i == size - 1) {
+			printf("\n");
 		}
+	}
 }
 
 int main(int argc, char *argv[]) {
