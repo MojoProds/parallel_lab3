@@ -112,7 +112,7 @@ int main(int argc, char *argv[]) {
 	//max = numbers[0];
 
 	// Print info
-	printf(" The maximum number in the array is: %u\n", max[0]);
+	printf(" The maximum number in the array is: %u\n", numbers[0]);
 
 	// Free memory
 	cudaFree(numbers_d);
