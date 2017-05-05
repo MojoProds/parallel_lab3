@@ -99,11 +99,11 @@ int main(int argc, char *argv[]) {
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / TPB);
-		cudaMemcpy(max, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
 		}
-		printArr(max, size/TPB + 1);
+		printArr(numbers, i);
 
 	}
 
