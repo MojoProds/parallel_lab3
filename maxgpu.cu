@@ -30,16 +30,6 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	}
 }
 
-unsigned int getmax(unsigned int num[], unsigned int size) {
-	unsigned int i;
-	unsigned int max = num[0];
-
-	for(i = 1; i < size; i++)
-		if(num[i] > max)
-			max = num[i];
-	return( max );
-}
-
 void printArr(unsigned int num[], unsigned int size) {
 	unsigned int i;
 
@@ -87,7 +77,8 @@ int main(int argc, char *argv[]) {
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
-		//printf("Iteration: %u\n", i);
+		printf("Iteration: %u\n", i);
+		printArr(numbers, i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / TPB);
@@ -95,13 +86,9 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
-		//printArr(numbers, i);
+		printArr(numbers, i);
 
 	}
-
-	// Copy memory from device to host
-	//cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-	//max = numbers[0];
 
 	// Print info
 	printf("The maximum number in the array is: %u\n", numbers[0]);
