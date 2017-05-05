@@ -107,7 +107,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
-		printArr(numbers, i);
+		//printArr(numbers, i);
 
 	}
 
