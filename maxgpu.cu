@@ -107,10 +107,10 @@ int main(int argc, char *argv[]) {
 
 	// Copy memory from device to host
 	//cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-	max = max[0];
+	//max = numbers[0];
 
 	// Print info
-	printf(" The maximum number in the array is: %u\n", max);
+	printf(" The maximum number in the array is: %u\n", max[0]);
 
 	// Free memory
 	cudaFree(numbers_d);
