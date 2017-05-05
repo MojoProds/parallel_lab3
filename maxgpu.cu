@@ -34,7 +34,7 @@ void printArr(unsigned int num[], unsigned int size) {
 	unsigned int i;
 
 	for(i = 0; i < size; i++) {
-		if(num[i] > 99000000) {
+		if(num[i] > 0) {
 			printf("%u, ", num[i]);
 			if(i % 7 == 0 || i == size - 1) {
 				printf("\n");
@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 			done = 1;
 		}
 		printArr(numbers, i);
-		printf("\nost-Iteration: %u\n", i);
+		printf("\nPost-Iteration: %u\n", i);
 		
 
 	}
