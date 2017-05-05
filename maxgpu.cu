@@ -98,7 +98,7 @@ int main(int argc, char *argv[]) {
 	for( i = size; i > 0 && done == 0;) {
 		printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
-		getmaxcu<<<(int)ceil((float)i / TPB),TPB>>>(numbers_d, max_d, i);
+		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / TPB);
 		printArr(max, size/TPB + 1);
 		cudaMemcpy(max, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
