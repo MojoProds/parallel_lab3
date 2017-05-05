@@ -95,12 +95,12 @@ int main(int argc, char *argv[]) {
 		printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / 1024),1024>>>(numbers_d, max_d, i);
+		i = (int)ceil((float)i / 1024);
 		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
 		}
-		printArr(numbers, i);
-		i = (int)ceil((float)i / 1024);
+		printArr(numbers, size);
 
 	}
 
