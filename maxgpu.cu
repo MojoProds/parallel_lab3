@@ -35,8 +35,7 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 	}
 
 	if (tid == 0) {
-		max_d[blockIdx.x] = 199;
-		shared[tid];
+		max_d[blockIdx.x] = shared[tid];
 	}
 }
 
