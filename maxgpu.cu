@@ -66,7 +66,6 @@ int main(int argc, char *argv[]) {
 	unsigned int size = 0;  // The size of the array
 	unsigned int i;  // loop index
 	unsigned int * numbers; //pointer to the array
-	unsigned int * max;
 	
 	if(argc !=2) {
 	   printf("usage: maxseq num\n");
@@ -89,9 +88,6 @@ int main(int argc, char *argv[]) {
 	   numbers[i] = rand()  % size;    
 	}
 
-	printf(" The maximum number in the array is: %u\n", 
-           getmax(numbers, size));
-
 	// Memory allocation in the device
 	unsigned int* numbers_d;
 	unsigned int* max_d;
@@ -101,7 +97,7 @@ int main(int argc, char *argv[]) {
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
-		printf("Iteration: %u\n", i);
+		//printf("Iteration: %u\n", i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / TPB);
@@ -109,7 +105,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
-		printArr(numbers, i);
+		//printArr(numbers, i);
 
 	}
 
@@ -118,7 +114,7 @@ int main(int argc, char *argv[]) {
 	//max = numbers[0];
 
 	// Print info
-	printf(" The maximum number in the array is: %u\n", numbers[0]);
+	printf("The maximum number in the array is: %u\n", numbers[0]);
 
 	// Free memory
 	cudaFree(numbers_d);
