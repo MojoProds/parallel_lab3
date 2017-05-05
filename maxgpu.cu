@@ -22,7 +22,7 @@ __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
 	int tid = threadIdx.x;
 	int gid = (blockDim.x * blockIdx.x) + tid;
-	//shared[tid] = 0;
+	shared[tid] = 0;
 
 	// if (gid < n)
 	// 	shared[tid] = numbers_d[gid];
