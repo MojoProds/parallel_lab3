@@ -3,7 +3,7 @@
 #include <time.h>
 #include <cuda.h>
 
-const int TPB = 512;
+const int TPB = 256;
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
