@@ -3,7 +3,7 @@
 #include <time.h>
 #include <cuda.h>
 
-const int TPB = 1024;
+const int TPB = 512;
 
 // __device__ unsigned int myMax(unsigned int* address, unsigned int val)
 // {
