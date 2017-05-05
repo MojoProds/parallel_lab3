@@ -77,8 +77,8 @@ int main(int argc, char *argv[]) {
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
-		printf("Iteration: %u\n", i);
-		printArr(numbers, i);
+		printf("Pre-Iteration: %u\n", i);
+		//printArr(numbers, i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / TPB);
@@ -86,6 +86,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
+		printf("Post-Iteration: %u\n", i);
 		//printArr(numbers, i);
 
 	}
