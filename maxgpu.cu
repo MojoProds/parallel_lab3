@@ -53,7 +53,10 @@ void printArr(unsigned int num[], unsigned int size) {
 	unsigned int i;
 
 	for(i = 0; i < size; i++)
-		printf("%u\n", num[i]);
+		printf("%u, ", num[i]);
+		if(i % 7 == 0 || i == size - 1) {
+			printf("\n");
+		}
 }
 
 int main(int argc, char *argv[]) {
@@ -103,7 +106,7 @@ int main(int argc, char *argv[]) {
 		if(i == 1) {
 			done = 1;
 		}
-		//printArr(numbers, i);
+		printArr(numbers, i);
 
 	}
 
