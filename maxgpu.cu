@@ -76,7 +76,6 @@ int main(int argc, char *argv[]) {
 	size = atol(argv[1]);
 
 	numbers = (unsigned int *)malloc(size * sizeof(unsigned int));
-	max = (unsigned int *)malloc((size/TPB + 1) * sizeof(unsigned int));
 	if( !numbers ) {
 	   printf("Unable to allocate mem for an array of size %u\n", size);
 	   exit(1);
