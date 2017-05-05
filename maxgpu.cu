@@ -3,18 +3,18 @@
 #include <time.h>
 #include <cuda.h>
 
-const int TPB = 512;
+const int TPB = 256;
 
-__device__ unsigned int myMax(unsigned int* address, unsigned int val)
-{
-	unsigned int old = *address;
-	unsigned int assumed;
-	while (val > old) {
-		assumed = old;
-		old = atomicCAS(address, assumed, val);
-	}
-	return old;
-}
+// __device__ unsigned int myMax(unsigned int* address, unsigned int val)
+// {
+// 	unsigned int old = *address;
+// 	unsigned int assumed;
+// 	while (val > old) {
+// 		assumed = old;
+// 		old = atomicCAS(address, assumed, val);
+// 	}
+// 	return old;
+// }
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
