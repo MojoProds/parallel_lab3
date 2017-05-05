@@ -18,7 +18,7 @@ const int TPB = 128;
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
-	__shared__ unsigned int shared[];
+	extern __shared__ unsigned int shared[];
 
 	int tid = threadIdx.x;
 	int gid = (blockDim.x * blockIdx.x) + tid;
