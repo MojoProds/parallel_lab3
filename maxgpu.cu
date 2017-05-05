@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
 	unsigned int size = 0;  // The size of the array
 	unsigned int i;  // loop index
 	unsigned int * numbers; //pointer to the array
-	unsigned int max;
+	unsigned int * max;
 	
 	if(argc !=2) {
 	   printf("usage: maxseq num\n");
@@ -69,6 +69,7 @@ int main(int argc, char *argv[]) {
 	size = atol(argv[1]);
 
 	numbers = (unsigned int *)malloc(size * sizeof(unsigned int));
+	max = (unsigned int *)malloc((size/1024 + 1) * sizeof(unsigned int));
 	if( !numbers ) {
 	   printf("Unable to allocate mem for an array of size %u\n", size);
 	   exit(1);
@@ -96,17 +97,17 @@ int main(int argc, char *argv[]) {
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / 1024),1024>>>(numbers_d, max_d, i);
 		i = (int)ceil((float)i / 1024);
-		cudaMemcpy(numbers, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+		cudaMemcpy(max, max_d, i * sizeof(unsigned int), cudaMemcpyDeviceToHost);
 		if(i == 1) {
 			done = 1;
 		}
-		printArr(numbers, size);
+		printArr(max, size);
 
 	}
 
 	// Copy memory from device to host
-	cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
-	max = numbers[0];
+	//cudaMemcpy(numbers, max_d, size * sizeof(unsigned int), cudaMemcpyDeviceToHost);
+	max = max[0];
 
 	// Print info
 	printf(" The maximum number in the array is: %u\n", max);
