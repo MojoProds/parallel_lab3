@@ -3,7 +3,7 @@
 #include <time.h>
 #include <cuda.h>
 
-const int TPB = 1024;
+const int TPB = 32;
 
 __global__ void getmaxcu(unsigned int* numbers_d, unsigned int* max_d, int n) {
 
@@ -77,7 +77,7 @@ int main(int argc, char *argv[]) {
 	// Call kernel
 	int done = 0;
 	for( i = size; i > 0 && done == 0;) {
-		printf("\nPre-Iteration: %u\n", i);
+		//printf("\nPre-Iteration: %u\n", i);
 		//printArr(numbers, i);
 		cudaMemcpy(numbers_d, numbers, i * sizeof(unsigned int), cudaMemcpyHostToDevice);
 		getmaxcu<<<(int)ceil((float)i / TPB),TPB, TPB * sizeof(unsigned int)>>>(numbers_d, max_d, i);
