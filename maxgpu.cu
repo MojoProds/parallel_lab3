@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
 			done = 1;
 		}
 		//printArr(numbers, i);
-		printf("\nPost-Iteration: %u\n", i);
+		p//rintf("\nPost-Iteration: %u\n", i);
 		
 
 	}
